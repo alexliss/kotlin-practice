@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Kotlin Practice</string>
+    <string name="movie_title">Movie Title</string>
+    <string name="rating">Rating:</string>
+    <string name="max_rating">/10</string>
+    <string name="adult_mark">R</string>
+</resources>
