@@ -2,7 +2,6 @@ package com.redspot.kotlinpractice
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.redspot.kotlinpractice.ui.details.DetailsFragment
 import com.redspot.kotlinpractice.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
@@ -16,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, DetailsFragment.newInstance()) // DetailsFragment.newInstance()
+                .replace(R.id.container, MainFragment.newInstance()) // DetailsFragment.newInstance()
                 .commitNow()
         }
     }
