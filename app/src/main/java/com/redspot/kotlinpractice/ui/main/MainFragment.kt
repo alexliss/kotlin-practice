@@ -10,21 +10,33 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.redspot.kotlinpractice.R
 import com.redspot.kotlinpractice.ui.adapter.MainRecyclerAdapter
 import com.redspot.kotlinpractice.databinding.MainFragmentBinding
 import com.redspot.kotlinpractice.model.AllCategory
 import com.redspot.kotlinpractice.model.AppState
 import com.redspot.kotlinpractice.model.entities.Movie
+import com.redspot.kotlinpractice.ui.adapter.CategoryItemRecyclerAdapter
+import com.redspot.kotlinpractice.ui.details.DetailsFragment
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), CategoryItemRecyclerAdapter.Interaction {
 
     private lateinit var binding: MainFragmentBinding
-
     private lateinit var mainCategoryRecycle: RecyclerView
     private lateinit var mainRecyclerAdapter: MainRecyclerAdapter
 
     companion object {
         fun newInstance() = MainFragment()
+    }
+
+    override fun onClickItem(movie: Movie) {
+
+        val manager = activity?.supportFragmentManager
+        manager
+            ?.beginTransaction()
+            ?.add(R.id.container, DetailsFragment.newInstance(movie))
+            ?.addToBackStack("")
+            ?.commitAllowingStateLoss()
     }
 
     private lateinit var viewModel: MainViewModel
@@ -70,7 +82,7 @@ class MainFragment : Fragment() {
         mainCategoryRecycle = binding.mainRecycler
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
         mainCategoryRecycle.layoutManager = layoutManager
-        mainRecyclerAdapter = MainRecyclerAdapter(context, list)
+        mainRecyclerAdapter = MainRecyclerAdapter(context, list, this)
         mainCategoryRecycle.adapter = mainRecyclerAdapter
     }
 }

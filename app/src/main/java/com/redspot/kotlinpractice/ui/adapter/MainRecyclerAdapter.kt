@@ -10,10 +10,10 @@ import com.redspot.kotlinpractice.databinding.MainRecyclerRowItemBinding
 import com.redspot.kotlinpractice.model.AllCategory
 import com.redspot.kotlinpractice.model.entities.Movie
 
-
 class MainRecyclerAdapter(
     private val context: Context?,
-    private var allCategoryList: List<AllCategory>
+    private var allCategoryList: List<AllCategory>,
+    private var movieInteraction: CategoryItemRecyclerAdapter.Interaction
     ) : RecyclerView.Adapter<MainRecyclerAdapter.MainViewHolder>() {
     private lateinit var binding: MainRecyclerRowItemBinding
 
@@ -48,7 +48,7 @@ class MainRecyclerAdapter(
         recyclerView: RecyclerView,
         movies: List<Movie>
     ) {
-        val itemRecyclerAdapter = CategoryItemRecyclerAdapter(movies)
+        val itemRecyclerAdapter = CategoryItemRecyclerAdapter(movies, movieInteraction)
         recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         recyclerView.adapter = itemRecyclerAdapter
     }

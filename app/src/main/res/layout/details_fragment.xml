@@ -5,6 +5,9 @@
     android:id="@+id/details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/design_default_color_background"
+    android:clickable="true"
+    android:focusable="true"
     tools:context=".ui.details.DetailsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -22,8 +22,10 @@ class RepositoryImpl : Repository {
 
     private fun getTestCategories() : List<AllCategory> {
         val testMovieList = mutableListOf<Movie>()
-        for(i in 1..10) {
+        val someMovie = Movie(12345, "Fight Club", true, "Some description. Maybe.")
+        for (i in 1..5) {
             testMovieList.add(Movie())
+            testMovieList.add(someMovie)
         }
         val testCategoryList: MutableList<AllCategory> = mutableListOf()
         testCategoryList.add(AllCategory("Classics", testMovieList))

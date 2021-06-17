@@ -8,9 +8,14 @@ import com.redspot.kotlinpractice.databinding.CategoryRecyclerRowItemBinding
 import com.redspot.kotlinpractice.model.entities.Movie
 
 class CategoryItemRecyclerAdapter(
-    private val movies: List<Movie>
+    private val movies: List<Movie>,
+    var movieInteraction: Interaction
 ) : RecyclerView.Adapter<CategoryItemRecyclerAdapter.CategoryItemViewHolder>() {
     private lateinit var binding: CategoryRecyclerRowItemBinding
+
+    interface Interaction {
+        fun onClickItem(movie: Movie)
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -35,6 +40,9 @@ class CategoryItemRecyclerAdapter(
     ) : RecyclerView.ViewHolder(itemView) {
         fun bind(movie: Movie) = with(binding) {
             movieTitle.text = movie.title
+            movieCard.setOnClickListener {
+                movieInteraction.onClickItem(movie)
+            }
         }
     }
 }

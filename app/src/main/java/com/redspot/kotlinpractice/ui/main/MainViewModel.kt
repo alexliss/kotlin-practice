@@ -2,10 +2,11 @@ package com.redspot.kotlinpractice.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.redspot.kotlinpractice.model.AllCategory
 import com.redspot.kotlinpractice.model.AppState
 import com.redspot.kotlinpractice.model.repsitory.Repository
 import com.redspot.kotlinpractice.model.repsitory.RepositoryImpl
+
+private const val WAIT_TIME: Long = 1000
 
 class MainViewModel : ViewModel() {
     private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData()
@@ -19,7 +20,7 @@ class MainViewModel : ViewModel() {
         liveDataToObserve.value = AppState.Loading
         Thread {
 
-            Thread.sleep(1000)
+            Thread.sleep(WAIT_TIME)
 
             // здесь рандом AppState, второй пункт первого задания.
             val randomInteger = (0..1).shuffled().first()
