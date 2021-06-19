@@ -1,4 +1,4 @@
-package com.redspot.kotlinpractice.ui.adapter
+package com.redspot.kotlinpractice.framework.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,14 +7,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.redspot.kotlinpractice.databinding.MainRecyclerRowItemBinding
-import com.redspot.kotlinpractice.model.AllCategory
+import com.redspot.kotlinpractice.model.entities.MoviesCategory
 import com.redspot.kotlinpractice.model.entities.Movie
 
 class MainRecyclerAdapter(
     private val context: Context?,
-    private var allCategoryList: List<AllCategory>,
+    private var moviesCategoryList: List<MoviesCategory>,
     private var movieInteraction: CategoryItemRecyclerAdapter.Interaction
     ) : RecyclerView.Adapter<MainRecyclerAdapter.MainViewHolder>() {
+
     private lateinit var binding: MainRecyclerRowItemBinding
 
     override fun onCreateViewHolder(
@@ -28,19 +29,18 @@ class MainRecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: MainRecyclerAdapter.MainViewHolder, position: Int) {
-        holder.bind(allCategoryList[position])
-        setCatItemRecycler(binding.moviesRecycler, allCategoryList[position].movies)
+        holder.bind(moviesCategoryList[position])
+        setCatItemRecycler(binding.moviesRecycler, moviesCategoryList[position].movies)
     }
 
-    override fun getItemCount(): Int {
-        return allCategoryList.size
-    }
+    override fun getItemCount() = moviesCategoryList.size
 
     inner class MainViewHolder(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
-        fun bind(allCategory: AllCategory) = with(binding) {
-            catTitle.text = allCategory.categoryTitle
+
+        fun bind(moviesCategory: MoviesCategory) = with(binding) {
+            catTitle.text = moviesCategory.categoryTitle
         }
     }
 

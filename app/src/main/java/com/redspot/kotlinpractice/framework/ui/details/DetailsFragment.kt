@@ -1,4 +1,4 @@
-package com.redspot.kotlinpractice.ui.details
+package com.redspot.kotlinpractice.framework.ui.details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,18 +11,14 @@ import com.redspot.kotlinpractice.model.entities.Movie
 class DetailsFragment : Fragment() {
     private lateinit var binding: DetailsFragmentBinding
 
+    // создание фрагмента
     companion object {
         private const val ARG = "Movie"
 
-        fun newInstance(movie: Movie) : DetailsFragment {
-
-            val arguments = Bundle()
-            arguments.putParcelable(ARG, movie)
-
-            val fragment = DetailsFragment()
-            fragment.arguments = arguments
-
-            return fragment
+        fun newInstance(movie: Movie) = DetailsFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(ARG, movie)
+            }
         }
     }
 
@@ -37,14 +33,13 @@ class DetailsFragment : Fragment() {
 
     // основные дела
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         super.onViewCreated(view, savedInstanceState)
         setData()
     }
 
     // ля какава красота
     private fun setData() = with(binding) {
-        arguments?.getParcelable<Movie>(ARG)?. let { movie ->
+        arguments?.getParcelable<Movie>(ARG)?.let { movie ->
             movieTitle.text = movie.title
             ratingValue.text = movie.voteAverage.toString()
             tagline.text = movie.tagline

@@ -1,4 +1,4 @@
-package com.redspot.kotlinpractice.ui.adapter
+package com.redspot.kotlinpractice.framework.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,10 +12,6 @@ class CategoryItemRecyclerAdapter(
     var movieInteraction: Interaction
 ) : RecyclerView.Adapter<CategoryItemRecyclerAdapter.CategoryItemViewHolder>() {
     private lateinit var binding: CategoryRecyclerRowItemBinding
-
-    interface Interaction {
-        fun onClickItem(movie: Movie)
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -31,18 +27,21 @@ class CategoryItemRecyclerAdapter(
         holder.bind(movies[position])
     }
 
-    override fun getItemCount(): Int {
-        return movies.size
-    }
+    override fun getItemCount() = movies.size
 
     inner class CategoryItemViewHolder(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
+
         fun bind(movie: Movie) = with(binding) {
             movieTitle.text = movie.title
             movieCard.setOnClickListener {
                 movieInteraction.onClickItem(movie)
             }
         }
+    }
+
+    interface Interaction {
+        fun onClickItem(movie: Movie)
     }
 }

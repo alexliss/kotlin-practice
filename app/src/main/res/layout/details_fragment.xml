@@ -8,7 +8,7 @@
     android:background="@color/design_default_color_background"
     android:clickable="true"
     android:focusable="true"
-    tools:context=".ui.details.DetailsFragment">
+    tools:context=".framework.ui.details.DetailsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/detailsLoading"
