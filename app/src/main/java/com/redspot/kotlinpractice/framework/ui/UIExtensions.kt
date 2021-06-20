@@ -4,7 +4,7 @@ import android.view.View
 import com.google.android.material.snackbar.Snackbar
 
 
-fun View.createAndShow(
+fun View.showSnackbar(
     message: String,
     actionText: String,
     action: (View) -> Unit,
@@ -14,4 +14,16 @@ fun View.createAndShow(
         .make(this, message, length)
         .setAction(actionText, action)
         .show()
+}
+
+fun View.show() {
+    if (this.visibility != View.VISIBLE) {
+        this.visibility = View.VISIBLE
+    }
+}
+
+fun View.hide() {
+    if (this.visibility != View.GONE) {
+        this.visibility = View.GONE
+    }
 }

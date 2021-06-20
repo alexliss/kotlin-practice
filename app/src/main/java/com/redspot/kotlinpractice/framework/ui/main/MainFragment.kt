@@ -12,8 +12,10 @@ import com.redspot.kotlinpractice.R
 import com.redspot.kotlinpractice.databinding.MainFragmentBinding
 import com.redspot.kotlinpractice.framework.ui.adapter.CategoryItemRecyclerAdapter
 import com.redspot.kotlinpractice.framework.ui.adapter.MainRecyclerAdapter
-import com.redspot.kotlinpractice.framework.ui.createAndShow
+import com.redspot.kotlinpractice.framework.ui.showSnackbar
 import com.redspot.kotlinpractice.framework.ui.details.DetailsFragment
+import com.redspot.kotlinpractice.framework.ui.hide
+import com.redspot.kotlinpractice.framework.ui.show
 import com.redspot.kotlinpractice.model.AppState
 import com.redspot.kotlinpractice.model.entities.Movie
 import com.redspot.kotlinpractice.model.entities.MoviesCategory
@@ -60,15 +62,15 @@ class MainFragment : Fragment(), CategoryItemRecyclerAdapter.Interaction {
     private fun renderData(appState: AppState) = with(binding) {
         when (appState) {
             is AppState.Success -> {
-                mainLoading.visibility = View.GONE
+                mainLoading.hide()
                 setCategoryRecycler(appState.data as List<MoviesCategory>)
             }
             is AppState.Loading -> {
-                mainLoading.visibility = View.VISIBLE
+                mainLoading.show()
             }
             is AppState.Failure -> {
-                mainLoading.visibility = View.GONE
-                main.createAndShow(appState.msg, "Reload", { viewModel.getCategories() })
+                mainLoading.hide()
+                main.showSnackbar(appState.msg, "Reload", { viewModel.getCategories() })
             }
         }
     }
