@@ -42,7 +42,7 @@ class DetailsFragment : Fragment() {
         arguments?.getParcelable<Movie>(ARG)?.let { movie ->
             movieTitle.text = movie.title
             ratingValue.text = movie.voteAverage.toString()
-            tagline.text = movie.tagline
+            //tagline.text = movie.tagline
             releaseDate.text = movie.releaseDate
             movieOverview.text = movie.overview
 
