@@ -1,7 +1,6 @@
 package com.redspot.kotlinpractice.framework.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.redspot.kotlinpractice.databinding.CategoryRecyclerRowItemBinding
@@ -11,16 +10,15 @@ class CategoryItemRecyclerAdapter(
     private val movies: List<Movie>,
     var movieInteraction: Interaction
 ) : RecyclerView.Adapter<CategoryItemRecyclerAdapter.CategoryItemViewHolder>() {
-    private lateinit var binding: CategoryRecyclerRowItemBinding
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): CategoryItemViewHolder {
-        binding = CategoryRecyclerRowItemBinding.inflate(
+        val binding = CategoryRecyclerRowItemBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
-        return CategoryItemViewHolder(binding.root)
+        return CategoryItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: CategoryItemViewHolder, position: Int) {
@@ -30,10 +28,10 @@ class CategoryItemRecyclerAdapter(
     override fun getItemCount() = movies.size
 
     inner class CategoryItemViewHolder(
-        itemView: View
-    ) : RecyclerView.ViewHolder(itemView) {
+        private val _binding: CategoryRecyclerRowItemBinding
+    ) : RecyclerView.ViewHolder(_binding.root) {
 
-        fun bind(movie: Movie) = with(binding) {
+        fun bind(movie: Movie) = with(_binding) {
             movieTitle.text = movie.title
             movieCard.setOnClickListener {
                 movieInteraction.onClickItem(movie)
