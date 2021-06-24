@@ -8,21 +8,22 @@ class RepositoryImpl : Repository {
 
     override fun getMovieFromLocalStorage() = Movie()
 
-    override fun getCategoriesFromLocalStorage() = getTestCategories()
+    override fun getCategoriesFromLocalStorage() = getTestCategories(10)
 
-    override fun getCategoriesFromServer() = getTestCategories()
+    override fun getCategoriesFromServer() = getTestCategories(10)
 
-    private fun getTestCategory() = mutableListOf<Movie>().apply {
-        for (i in 1..5) {
-            add(Movie())
-            add(Movie(12345, "Fight Club", true, "Some description. Maybe."))
+    private fun getMoviesForCategory(count: Int) = mutableListOf<Movie>().apply {
+        for (i in 0 until count) {
+            add(Movie(12345, "Fight $i Club", true, "Some description. Maybe."))
         }
     }
 
-    private fun getTestCategories() = mutableListOf<MoviesCategory>().apply {
-        add(MoviesCategory("Classics", getTestCategory()))
-        add(MoviesCategory("Top Ratings", getTestCategory()))
-        add(MoviesCategory("In Theaters", getTestCategory()))
-        add(MoviesCategory("Soon", getTestCategory()))
+    private fun getTestCategories(count: Int) = mutableListOf<MoviesCategory>().apply {
+        val titles = listOf("Classics", "Top Ratings", "In Theaters", "Soon")
+
+        for (i in 0 until count) {
+            val title = titles[i % titles.size] + " " + i.toString()
+            add(MoviesCategory(title, getMoviesForCategory(count)))
+        }
     }
 }
