@@ -17,6 +17,7 @@ class MainRecyclerAdapter(
     ) : RecyclerView.Adapter<MainRecyclerAdapter.MainViewHolder>() {
 
     private lateinit var binding: MainRecyclerRowItemBinding
+    private val moviesAdaptersList = mutableListOf<CategoryItemRecyclerAdapter>()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -25,15 +26,27 @@ class MainRecyclerAdapter(
         binding = MainRecyclerRowItemBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
+        binding.moviesRecycler.layoutManager = LinearLayoutManager(
+            context, RecyclerView.HORIZONTAL, false
+        )
+        createCategoryItemRecyclerAdapters()
         return MainViewHolder(binding.root)
     }
 
     override fun onBindViewHolder(holder: MainRecyclerAdapter.MainViewHolder, position: Int) {
         holder.bind(moviesCategoryList[position])
-        setCatItemRecycler(binding.moviesRecycler, moviesCategoryList[position].movies)
+        binding.moviesRecycler.adapter = moviesAdaptersList[position]
     }
 
     override fun getItemCount() = moviesCategoryList.size
+
+    private fun createCategoryItemRecyclerAdapters() {
+        moviesAdaptersList.apply {
+            for (moviesList in moviesCategoryList) {
+                add(CategoryItemRecyclerAdapter(moviesList.movies, movieInteraction))
+            }
+        }
+    }
 
     inner class MainViewHolder(
         itemView: View
@@ -42,14 +55,5 @@ class MainRecyclerAdapter(
         fun bind(moviesCategory: MoviesCategory) = with(binding) {
             catTitle.text = moviesCategory.categoryTitle
         }
-    }
-
-    private fun setCatItemRecycler(
-        recyclerView: RecyclerView,
-        movies: List<Movie>
-    ) {
-        val itemRecyclerAdapter = CategoryItemRecyclerAdapter(movies, movieInteraction)
-        recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        recyclerView.adapter = itemRecyclerAdapter
     }
 }

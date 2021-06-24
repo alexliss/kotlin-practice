@@ -19,3 +19,5 @@ gradlew
 gradlew.bat
 
 .idea/
+
+apikey.properties
