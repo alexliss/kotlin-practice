@@ -17,18 +17,15 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     private fun getDataFromLocalSource() {
         liveDataToObserve.value = AppState.Loading
         Thread {
-
             Thread.sleep(WAIT_TIME)
-
-            // здесь рандом AppState, второй пункт первого задания.
-            val randomInteger = (0..1).shuffled().first()
-            if (randomInteger == 0) {
+            try {
                 liveDataToObserve.postValue(
-                    AppState.Success(repository.getCategoriesFromLocalStorage())
+                       AppState.Success(repository.getCategoriesFromServer())
                 )
-            } else {
-                // без понятия, как отсюда ловить ошибку
-                liveDataToObserve.postValue(AppState.Failure("Error!"))
+            } catch (error: Exception) {
+                error.message?.let {
+                    liveDataToObserve.postValue(AppState.Failure(it))
+                }
             }
         }.start()
     }
