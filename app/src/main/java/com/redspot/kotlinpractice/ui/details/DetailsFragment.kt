@@ -1,0 +1,59 @@
+package com.redspot.kotlinpractice.ui.details
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.redspot.kotlinpractice.databinding.DetailsFragmentBinding
+import com.redspot.kotlinpractice.model.entities.Movie
+
+class DetailsFragment : Fragment() {
+    private lateinit var binding: DetailsFragmentBinding
+
+    companion object {
+        private const val ARG = "Movie"
+
+        fun newInstance(movie: Movie) : DetailsFragment {
+
+            val arguments = Bundle()
+            arguments.putParcelable(ARG, movie)
+
+            val fragment = DetailsFragment()
+            fragment.arguments = arguments
+
+            return fragment
+        }
+    }
+
+    // привязываем binding, все дела
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = DetailsFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    // основные дела
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        super.onViewCreated(view, savedInstanceState)
+        setData()
+    }
+
+    // ля какава красота
+    private fun setData() = with(binding) {
+        arguments?.getParcelable<Movie>(ARG)?. let { movie ->
+            movieTitle.text = movie.title
+            ratingValue.text = movie.voteAverage.toString()
+            tagline.text = movie.tagline
+            releaseDate.text = movie.releaseDate
+            movieOverview.text = movie.overview
+
+            if (movie.adult) {
+                adult.visibility = View.VISIBLE
+            }
+        }
+    }
+}
