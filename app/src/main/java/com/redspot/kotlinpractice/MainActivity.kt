@@ -2,7 +2,7 @@ package com.redspot.kotlinpractice
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.redspot.kotlinpractice.ui.main.MainFragment
+import com.redspot.kotlinpractice.framework.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 

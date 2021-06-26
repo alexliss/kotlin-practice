@@ -1,16 +1,14 @@
-package com.redspot.kotlinpractice.ui.main
+package com.redspot.kotlinpractice.framework.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.redspot.kotlinpractice.model.AppState
-import com.redspot.kotlinpractice.model.repsitory.Repository
-import com.redspot.kotlinpractice.model.repsitory.RepositoryImpl
+import com.redspot.kotlinpractice.model.repository.Repository
 
 private const val WAIT_TIME: Long = 1000
 
-class MainViewModel : ViewModel() {
+class MainViewModel(private val repository: Repository) : ViewModel() {
     private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData()
-    private val repository: Repository = RepositoryImpl()
 
     fun getLiveData() = liveDataToObserve
 
