@@ -1,21 +1,23 @@
-package com.redspot.kotlinpractice.model.repository
+package com.redspot.kotlinpractice
 
+import android.content.Context
+import android.content.Intent
+import androidx.core.app.JobIntentService
 import com.redspot.kotlinpractice.model.CATEGORY_POPULAR
 import com.redspot.kotlinpractice.model.CATEGORY_TOP_RATED
 import com.redspot.kotlinpractice.model.CATEGORY_UPCOMING
 import com.redspot.kotlinpractice.model.DataLoader
-import com.redspot.kotlinpractice.model.entities.MoviesCategory
 import com.redspot.kotlinpractice.model.entities.Movie
+import com.redspot.kotlinpractice.model.entities.MoviesCategory
+import com.redspot.kotlinpractice.model.repository.RepositoryImpl
 import com.redspot.kotlinpractice.model.rest_entities.MovieDTO
 
-class RepositoryImpl : Repository {
-    override fun getMovieFromServer() = Movie()
+class LoadingService : JobIntentService() {
+    override fun onHandleWork(intent: Intent) {
+        sendMyBroadcast(getCategoriesFromServer())
+    }
 
-    override fun getMovieFromLocalStorage() = Movie()
-
-    override fun getCategoriesFromLocalStorage() = getTestCategories(10)
-
-    override fun getCategoriesFromServer() = mutableListOf<MoviesCategory>().apply {
+    fun getCategoriesFromServer() = arrayListOf<MoviesCategory>().apply {
         add(getPopularCategory())
         add(getTopRatedCategory())
         add(getUpcomingCategory())
@@ -30,7 +32,14 @@ class RepositoryImpl : Repository {
         releaseDate = movieDTO.release_date
     )
 
-    private fun getPopularCategory() : MoviesCategory{
+    private fun sendMyBroadcast(movies: ArrayList<MoviesCategory>) {
+        val broadcastIntent = Intent()
+        broadcastIntent.putExtra(INTENT_SERVICE_DATA, movies)
+        broadcastIntent.action = INTENT_ACTION_KEY
+        sendBroadcast(broadcastIntent)
+    }
+
+    private fun getPopularCategory() : MoviesCategory {
         val dto = DataLoader.loadCategory(CATEGORY_POPULAR)
         val converted = mutableListOf<Movie>()
         dto?.let {
@@ -63,18 +72,13 @@ class RepositoryImpl : Repository {
         return MoviesCategory("Upcoming", converted)
     }
 
-    private fun getMoviesForCategory(count: Int) = mutableListOf<Movie>().apply {
-        for (i in 0 until count) {
-            add(Movie(12345, "Fight $i Club", true, "Some description. Maybe."))
-        }
-    }
+    companion object {
+        const val INTENT_ACTION_KEY = "com.redspot.kotlinpractice.DATA_LOADED"
+        const val INTENT_SERVICE_DATA = "INTENT_SERVICE_DATA"
 
-    private fun getTestCategories(count: Int) = mutableListOf<MoviesCategory>().apply {
-        val titles = listOf("Classics", "Top Ratings", "In Theaters", "Soon")
-
-        for (i in 0 until count) {
-            val title = titles[i % titles.size] + " " + i.toString()
-            add(MoviesCategory(title, getMoviesForCategory(count)))
+        fun start(context: Context) {
+            val intent = Intent(context, LoadingService::class.java)
+            enqueueWork(context, LoadingService::class.java, 3322, intent)
         }
     }
 }

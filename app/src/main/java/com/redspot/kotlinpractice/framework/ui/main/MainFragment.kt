@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.redspot.kotlinpractice.LoadedDataBroadcastReceiver
+import com.redspot.kotlinpractice.LoadingService
 import com.redspot.kotlinpractice.NetworkStatusBroadcastReceiver
 import com.redspot.kotlinpractice.R
 import com.redspot.kotlinpractice.databinding.MainFragmentBinding
@@ -29,22 +31,25 @@ class MainFragment : Fragment(), CategoryItemRecyclerAdapter.Interaction {
     private lateinit var binding: MainFragmentBinding
     private lateinit var mainCategoryRecycle: RecyclerView
     private lateinit var mainRecyclerAdapter: MainRecyclerAdapter
-    private val viewModel: MainViewModel by viewModel()
+    //private val viewModel: MainViewModel by viewModel()
     private var isLoaded = false
 
-    private val receiver = NetworkStatusBroadcastReceiver()
+    private val networkStatusReceiver = NetworkStatusBroadcastReceiver()
+    private val loadedDataReceiver = LoadedDataBroadcastReceiver()
 
     companion object {
         fun newInstance() = MainFragment()
     }
 
     override fun onResume() {
-        context?.registerReceiver(receiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+        context?.registerReceiver(networkStatusReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+        context?.registerReceiver(loadedDataReceiver, IntentFilter(LoadingService.INTENT_ACTION_KEY))
         super.onResume()
     }
 
     override fun onPause() {
-        context?.unregisterReceiver(receiver)
+        context?.unregisterReceiver(networkStatusReceiver)
+        context?.unregisterReceiver(loadedDataReceiver)
         super.onPause()
     }
 
@@ -70,17 +75,17 @@ class MainFragment : Fragment(), CategoryItemRecyclerAdapter.Interaction {
         super.onViewCreated(view, savedInstanceState)
 
         val appStateObserver = Observer<AppState> { renderData(it) }
-        viewModel.getLiveData().observe(viewLifecycleOwner, appStateObserver)
+        loadedDataReceiver.getData().observe(viewLifecycleOwner, appStateObserver)
 
         val networkStatusObserver = Observer<Boolean> { connectionManager(it) }
-        receiver.getConnectionStatus().observe(viewLifecycleOwner, networkStatusObserver)
+        networkStatusReceiver.getConnectionStatus().observe(viewLifecycleOwner, networkStatusObserver)
     }
 
     private fun renderData(appState: AppState) = with(binding) {
         when (appState) {
             is AppState.Success -> {
                 mainLoading.hide()
-                setCategoryRecycler(appState.data as List<MoviesCategory>)
+                setCategoryRecycler(appState.data as ArrayList<MoviesCategory>)
                 isLoaded = true;
             }
             is AppState.Loading -> {
@@ -88,7 +93,7 @@ class MainFragment : Fragment(), CategoryItemRecyclerAdapter.Interaction {
             }
             is AppState.Failure -> {
                 mainLoading.hide()
-                main.showSnackbar(appState.msg, "Reload", { viewModel.getCategories() })
+                main.showSnackbar(appState.msg, "Reload", { LoadingService.start(requireContext()) })
             }
         }
     }
@@ -103,7 +108,7 @@ class MainFragment : Fragment(), CategoryItemRecyclerAdapter.Interaction {
 
     private fun connectionManager(connectionStatus: Boolean) {
         when (connectionStatus) {
-            true -> if (!isLoaded) viewModel.getCategories()
+            true -> if (!isLoaded) LoadingService.start(requireContext())
             false -> binding.main.showSnackbar("No connection", "OK", {})
         }
     }
