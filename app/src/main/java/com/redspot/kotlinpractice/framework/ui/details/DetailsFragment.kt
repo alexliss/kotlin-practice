@@ -1,12 +1,15 @@
 package com.redspot.kotlinpractice.framework.ui.details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.redspot.kotlinpractice.databinding.DetailsFragmentBinding
 import com.redspot.kotlinpractice.model.entities.Movie
+import com.redspot.kotlinpractice.model.rest.imageUrl
+import com.squareup.picasso.Picasso
 
 class DetailsFragment : Fragment() {
     private lateinit var binding: DetailsFragmentBinding
@@ -45,9 +48,16 @@ class DetailsFragment : Fragment() {
             //tagline.text = movie.tagline
             releaseDate.text = movie.releaseDate
             movieOverview.text = movie.overview
+            Picasso
+                .get()
+                .load(imageUrl + movie.posterPath)
+                .fit()
+                .centerCrop()
+                .into(poster)
 
             if (movie.adult) {
                 adult.visibility = View.VISIBLE
+                Log.d("LOSHARA", "lohhh")
             }
         }
     }

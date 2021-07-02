@@ -6,7 +6,8 @@ import com.redspot.kotlinpractice.model.CATEGORY_UPCOMING
 import com.redspot.kotlinpractice.model.DataLoader
 import com.redspot.kotlinpractice.model.entities.MoviesCategory
 import com.redspot.kotlinpractice.model.entities.Movie
-import com.redspot.kotlinpractice.model.rest_entities.MovieDTO
+import com.redspot.kotlinpractice.model.rest.MovieCategoryRepo
+import com.redspot.kotlinpractice.model.rest.rest_entities.MovieDTO
 
 class RepositoryImpl : Repository {
     override fun getMovieFromServer() = Movie()
@@ -30,40 +31,24 @@ class RepositoryImpl : Repository {
         releaseDate = movieDTO.release_date
     )
 
-    private fun getPopularCategory() : MoviesCategory{
-        val dto = DataLoader.loadCategory(CATEGORY_POPULAR)
-        val converted = mutableListOf<Movie>()
-        dto?.let {
-            for (movie in it.results) {
-                converted.add(convertMovieGTOToMovie(movie))
-            }
-        }
-        return MoviesCategory("Popular", converted)
-
+    private fun getPopularCategory() : MoviesCategory {
+        //val dto = DataLoader.loadCategory(CATEGORY_POPULAR)
+        val dto = MovieCategoryRepo.api.getCategory(CATEGORY_POPULAR).execute().body()
+        if (dto?.results == null) throw Exception("NULL")
+        return MoviesCategory("Popular", dto.results)
     }
 
     private fun getTopRatedCategory() : MoviesCategory {
-        val dto = DataLoader.loadCategory(CATEGORY_TOP_RATED)
-        val converted = mutableListOf<Movie>()
-        dto?.let {
-            for (movie in it.results) {
-                converted.add(convertMovieGTOToMovie(movie))
-            }
-        }
-        return MoviesCategory("Popular", converted)
+        val  dto = MovieCategoryRepo.api.getCategory(CATEGORY_TOP_RATED).execute().body()
+        if (dto?.results == null) throw Exception("NULL")
+        return MoviesCategory("Top Rated", dto.results)
 
     }
 
     private fun getUpcomingCategory() : MoviesCategory {
-        val dto = DataLoader.loadCategory(CATEGORY_UPCOMING)
-        val converted = mutableListOf<Movie>()
-        dto?.let {
-            for (movie in it.results) {
-                converted.add(convertMovieGTOToMovie(movie))
-            }
-        }
-        return MoviesCategory("Upcoming", converted)
-
+        val dto = MovieCategoryRepo.api.getCategory(CATEGORY_UPCOMING).execute().body()
+        if (dto?.results == null) throw Exception("NULL")
+        return MoviesCategory("Upcoming", dto.results)
     }
 
     private fun getMoviesForCategory(count: Int) = mutableListOf<Movie>().apply {

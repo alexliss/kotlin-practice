@@ -4,7 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.redspot.kotlinpractice.BuildConfig
-import com.redspot.kotlinpractice.model.rest_entities.MoviesCategoryDTO
+import com.redspot.kotlinpractice.model.rest.rest_entities.MoviesCategoryDTO
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.MalformedURLException
