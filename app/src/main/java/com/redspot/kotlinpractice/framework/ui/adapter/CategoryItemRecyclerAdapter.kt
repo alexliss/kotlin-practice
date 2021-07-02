@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.redspot.kotlinpractice.databinding.CategoryRecyclerRowItemBinding
 import com.redspot.kotlinpractice.model.entities.Movie
+import com.redspot.kotlinpractice.model.rest.imageUrl
+import com.squareup.picasso.Picasso
 
 class CategoryItemRecyclerAdapter(
     private val movies: List<Movie>,
@@ -33,6 +35,12 @@ class CategoryItemRecyclerAdapter(
 
         fun bind(movie: Movie) = with(_binding) {
             movieTitle.text = movie.title
+            Picasso
+                .get()
+                .load(imageUrl + movie.posterPath)
+                .fit()
+                .centerCrop()
+                .into(moviePoster)
             movieCard.setOnClickListener {
                 movieInteraction.onClickItem(movie)
             }
