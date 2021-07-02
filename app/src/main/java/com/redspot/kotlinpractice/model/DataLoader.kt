@@ -30,23 +30,30 @@ object DataLoader {
                 urlConnection = uri.openConnection() as HttpsURLConnection
                 urlConnection.requestMethod = GET_REQUEST
                 urlConnection.readTimeout = 10000
-                val bufferedReader = BufferedReader(InputStreamReader(urlConnection.inputStream))
-                val lines = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                    getLinesOld(bufferedReader)
-                } else {
-                    getLines(bufferedReader)
+                when (urlConnection.responseCode) {
+                    200 -> {
+                        val bufferedReader = BufferedReader(InputStreamReader(urlConnection.inputStream))
+                        val lines = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                            getLinesOld(bufferedReader)
+                        } else {
+                            getLines(bufferedReader)
+                        }
+                        return Gson().fromJson(lines, MoviesCategoryDTO::class.java)
+                    }
+                    else -> throw Exception(urlConnection.responseCode.toString() + ": " + urlConnection.responseMessage)
                 }
-                return Gson().fromJson(lines, MoviesCategoryDTO::class.java)
+
             } catch (e: Exception) {
                 e.printStackTrace()
+                throw Exception(e.message)
             }
             finally {
                 urlConnection.disconnect()
             }
         } catch (e: MalformedURLException) {
             e.printStackTrace()
+            throw Exception("MalformedURLException")
         }
-        return null
     }
 
     private fun getLinesOld(reader: BufferedReader) : String {
