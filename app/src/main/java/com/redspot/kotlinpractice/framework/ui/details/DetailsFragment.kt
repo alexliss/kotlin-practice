@@ -54,11 +54,6 @@ class DetailsFragment : Fragment() {
                 .fit()
                 .centerCrop()
                 .into(poster)
-
-            if (movie.adult) {
-                adult.visibility = View.VISIBLE
-                Log.d("LOSHARA", "lohhh")
-            }
         }
     }
 }
