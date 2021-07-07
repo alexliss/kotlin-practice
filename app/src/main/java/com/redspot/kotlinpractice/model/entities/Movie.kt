@@ -1,11 +1,9 @@
 package com.redspot.kotlinpractice.model.entities
 
 import android.os.Parcelable
-import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
-@Entity(tableName = "movies")
 @Parcelize
 data class Movie(
     val id: Long = 17473,

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.redspot.kotlinpractice.databinding.CategoryRecyclerRowItemBinding
-import com.redspot.kotlinpractice.model.entities.Movie
+import com.redspot.kotlinpractice.db.entity.Movie
 import com.redspot.kotlinpractice.model.rest.imageUrl
 import com.squareup.picasso.Picasso
 

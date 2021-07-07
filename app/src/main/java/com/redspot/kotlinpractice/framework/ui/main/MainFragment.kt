@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.redspot.kotlinpractice.NetworkStatusBroadcastReceiver
 import com.redspot.kotlinpractice.R
 import com.redspot.kotlinpractice.databinding.MainFragmentBinding
+import com.redspot.kotlinpractice.db.entity.Movie
 import com.redspot.kotlinpractice.framework.ui.adapter.CategoryItemRecyclerAdapter
 import com.redspot.kotlinpractice.framework.ui.adapter.MainRecyclerAdapter
 import com.redspot.kotlinpractice.framework.ui.details.DetailsFragment
@@ -20,7 +21,6 @@ import com.redspot.kotlinpractice.framework.ui.hide
 import com.redspot.kotlinpractice.framework.ui.show
 import com.redspot.kotlinpractice.framework.ui.showSnackbar
 import com.redspot.kotlinpractice.model.AppState
-import com.redspot.kotlinpractice.model.entities.Movie
 import com.redspot.kotlinpractice.model.entities.MoviesCategory
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -88,7 +88,7 @@ class MainFragment : Fragment(), CategoryItemRecyclerAdapter.Interaction {
             }
             is AppState.Failure -> {
                 mainLoading.hide()
-                main.showSnackbar(appState.msg, "Reload", { viewModel.getCategories() })
+                main.showSnackbar(appState.msg, "Reload", { viewModel.getCategoriesFromServer() })
             }
         }
     }
@@ -103,8 +103,11 @@ class MainFragment : Fragment(), CategoryItemRecyclerAdapter.Interaction {
 
     private fun connectionManager(connectionStatus: Boolean) {
         when (connectionStatus) {
-            true -> if (!isLoaded) viewModel.getCategories()
-            false -> binding.main.showSnackbar("No connection", "OK", {})
+            true -> if (!isLoaded) viewModel.getCategoriesFromServer()
+            false -> binding.main.showSnackbar(
+                "No connection. Get data from local DB?",
+                "OK",
+                { viewModel.getCategoriesFromLocalSource() })
         }
     }
 }

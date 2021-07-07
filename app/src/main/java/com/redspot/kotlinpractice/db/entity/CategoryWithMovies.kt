@@ -12,5 +12,5 @@ data class CategoryWithMovies(
         entityColumn = "movieId",
         associateBy = Junction(CategoryMoviesCrossRef::class)
     )
-    val movies: ArrayList<Movie>
+    val movies: List<Movie>
 )

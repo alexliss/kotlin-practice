@@ -1,13 +1,12 @@
 package com.redspot.kotlinpractice.framework.ui.details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.redspot.kotlinpractice.databinding.DetailsFragmentBinding
-import com.redspot.kotlinpractice.model.entities.Movie
+import com.redspot.kotlinpractice.db.entity.Movie
 import com.redspot.kotlinpractice.model.rest.imageUrl
 import com.squareup.picasso.Picasso
 

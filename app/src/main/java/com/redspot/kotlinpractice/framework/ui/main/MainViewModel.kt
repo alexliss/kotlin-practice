@@ -15,7 +15,25 @@ class MainViewModel(private val repository: Repository)
 
     fun getLiveData() = liveDataToObserve
 
-    fun getCategories() = getDataFromLocalSource()
+    fun getCategoriesFromServer() = getDataFromServer()
+
+    fun getCategoriesFromLocalSource() = getDataFromLocalSource()
+
+    private fun getDataFromServer() {
+        liveDataToObserve.value = AppState.Loading
+        launch {
+            delay(WAIT_TIME)
+            liveDataToObserve.value = async(Dispatchers.IO) {
+                try {
+                    return@async AppState.Success(repository.getCategoriesFromServer())
+                } catch (error: Exception) {
+                    error.message?.let {
+                        return@async AppState.Failure(it)
+                    }
+                }
+            }.await()
+        }
+    }
 
     private fun getDataFromLocalSource() {
         liveDataToObserve.value = AppState.Loading
@@ -23,7 +41,7 @@ class MainViewModel(private val repository: Repository)
             delay(WAIT_TIME)
             liveDataToObserve.value = async(Dispatchers.IO) {
                 try {
-                    return@async AppState.Success(repository.getCategoriesFromServer())
+                    return@async AppState.Success(repository.getCategoriesFromLocalSource())
                 } catch (error: Exception) {
                     error.message?.let {
                         return@async AppState.Failure(it)
