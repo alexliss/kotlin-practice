@@ -9,7 +9,7 @@ import com.redspot.kotlinpractice.db.entity.MovieCategory
 
 @Database(
     entities = [Movie::class, MovieCategory::class, CategoryMoviesCrossRef::class],
-    version = 1
+    version = 2
 )
 abstract class MovieDatabase : RoomDatabase() {
 

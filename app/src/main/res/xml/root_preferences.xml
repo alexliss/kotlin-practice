@@ -1,0 +1,14 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/filter_settings">
+
+        <SwitchPreferenceCompat
+            app:dependency=""
+            app:key="show watched"
+            app:summary="@string/needs_restart"
+            app:title="@string/show_watched" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

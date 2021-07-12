@@ -35,7 +35,7 @@
             android:id="@+id/movieOverview"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="48dp"
             android:layout_marginBottom="32dp"
             android:textSize="16sp"
@@ -43,7 +43,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/movieTitle"
-            app:layout_constraintTop_toBottomOf="@+id/poster" />
+            app:layout_constraintTop_toBottomOf="@+id/userRatingBar" />
 
         <!--        <TextView-->
         <!--            android:id="@+id/tagline"-->
@@ -72,10 +72,9 @@
             android:id="@+id/ratingValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/montserrat"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/montserrat_bold"
             android:textSize="34sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/rating"
             app:layout_constraintTop_toBottomOf="@+id/rating" />
 
@@ -83,10 +82,9 @@
             android:id="@+id/maxRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat"
+            android:fontFamily="@font/montserrat_bold"
             android:text="@string/max_rating"
             android:textSize="34sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/ratingValue"
             app:layout_constraintTop_toTopOf="@+id/ratingValue" />
 
@@ -117,6 +115,41 @@
             app:layout_constraintBottom_toBottomOf="@+id/movieTitle"
             app:layout_constraintStart_toEndOf="@+id/movieTitle"
             app:layout_constraintTop_toTopOf="@+id/movieTitle" />
+
+        <RatingBar
+            android:id="@+id/userRatingBar"
+            style="@android:style/Widget.Material.Light.RatingBar.Indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:isIndicator="false"
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:textAlignment="viewStart"
+            app:layout_constraintEnd_toEndOf="@+id/poster"
+            app:layout_constraintTop_toBottomOf="@+id/poster" />
+
+        <TextView
+            android:id="@+id/userRating"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/your_rating"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/userRatingBar"
+            app:layout_constraintEnd_toStartOf="@+id/userRatingBar"
+            app:layout_constraintStart_toStartOf="@+id/movieTitle"
+            app:layout_constraintTop_toTopOf="@+id/userRatingBar" />
+
+        <CheckBox
+            android:id="@+id/watched"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/watched"
+            app:layout_constraintStart_toStartOf="@+id/movieTitle"
+            app:layout_constraintTop_toBottomOf="@+id/maxRating" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

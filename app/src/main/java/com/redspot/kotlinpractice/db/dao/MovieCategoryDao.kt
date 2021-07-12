@@ -7,7 +7,7 @@ import com.redspot.kotlinpractice.db.entity.MovieCategory
 
 @Dao
 interface MovieCategoryDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertMovieCategory(entity: MovieCategory) : Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -22,6 +22,9 @@ interface MovieCategoryDao {
     @Query("SELECT * FROM movies WHERE movieId = :id")
     fun getMovieById(id: Long) : Movie
 
+    @Query("SELECT * FROM movies WHERE movieId = :id")
+    fun getMovieByIdNullable(id: Long) : Movie?
+
     @Query("SELECT * FROM categories")
     fun getAllCategories() : List<MovieCategory>
 
@@ -29,8 +32,20 @@ interface MovieCategoryDao {
     fun getCategoryByName(name: String) : MovieCategory
 
     @Transaction
-    @Query("SELECT * FROM movies WHERE movieId IN (SELECT movieId FROM categories_movies WHERE categoryId IN (SELECT categoryId FROM categories WHERE categoryName = :categoryName))")
+    @Query("SELECT * FROM movies WHERE movieId IN (SELECT movieId FROM categories_movies WHERE categoryId IN (SELECT categoryId FROM categories WHERE categoryName = :categoryName)) ORDER BY popularity DESC")
     fun getMoviesFromCategoryByName(categoryName: String) : List<Movie>
+
+    @Transaction
+    @Query("SELECT * FROM movies WHERE watched = 0 AND movieId IN (SELECT movieId FROM categories_movies WHERE categoryId IN (SELECT categoryId FROM categories WHERE categoryName = :categoryName)) ORDER BY popularity DESC")
+    fun getMoviesFromCategoryByNameNotWatched(categoryName: String) : List<Movie>
+
+    @Transaction
+    @Query("SELECT * FROM movies WHERE movieId IN (SELECT movieId FROM categories_movies WHERE categoryId IN (SELECT categoryId FROM categories WHERE categoryName = :categoryName)) ORDER BY voteAverage DESC")
+    fun getMoviesFromCategoryByNameSortByVoteAverage(categoryName: String) : List<Movie>
+
+    @Transaction
+    @Query("SELECT * FROM movies WHERE watched = 0 AND movieId IN (SELECT movieId FROM categories_movies WHERE categoryId IN (SELECT categoryId FROM categories WHERE categoryName = :categoryName)) ORDER BY voteAverage DESC")
+    fun getMoviesFromCategoryByNameSortByVoteAverageNotWatched(categoryName: String) : List<Movie>
 
     @Transaction
     fun insertCategoryWithMovies(movies: List<Movie>, categoryName: String) {

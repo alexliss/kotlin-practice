@@ -2,6 +2,7 @@ package com.redspot.kotlinpractice.di
 
 import androidx.room.Room
 import com.redspot.kotlinpractice.db.MovieDatabase
+import com.redspot.kotlinpractice.framework.ui.details.DetailsViewModel
 import com.redspot.kotlinpractice.framework.ui.main.MainViewModel
 import com.redspot.kotlinpractice.model.repository.Repository
 import com.redspot.kotlinpractice.model.repository.RepositoryImpl
@@ -12,19 +13,20 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-    viewModel { MainViewModel(get()) }
-
     single {
         Room.databaseBuilder(
             androidApplication(),
             MovieDatabase::class.java,
             MovieDatabase.DATABASE_NAME
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     single(named("MovieCategoryDao")) {
         get<MovieDatabase>().movieCategoryDao()
     }
 
-    single<Repository> { RepositoryImpl(get<MovieDatabase>()) }
+    single<Repository> { RepositoryImpl(get()) }
+
+    viewModel { MainViewModel(get()) }
+    viewModel { DetailsViewModel(get()) }
 }

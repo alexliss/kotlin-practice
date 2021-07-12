@@ -1,6 +1,7 @@
 package com.redspot.kotlinpractice.framework.ui.details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,17 +10,21 @@ import com.redspot.kotlinpractice.databinding.DetailsFragmentBinding
 import com.redspot.kotlinpractice.db.entity.Movie
 import com.redspot.kotlinpractice.model.rest.imageUrl
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.runBlocking
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailsFragment : Fragment() {
     private lateinit var binding: DetailsFragmentBinding
+    private val viewModel: DetailsViewModel by viewModel()
+    private lateinit var movie: Movie
 
     // создание фрагмента
     companion object {
-        private const val ARG = "Movie"
+        private const val ARG = "MovieID"
 
-        fun newInstance(movie: Movie) = DetailsFragment().apply {
+        fun newInstance(movieId: Long) = DetailsFragment().apply {
             arguments = Bundle().apply {
-                putParcelable(ARG, movie)
+                putLong(ARG, movieId)
             }
         }
     }
@@ -36,23 +41,34 @@ class DetailsFragment : Fragment() {
     // основные дела
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        arguments?.getLong(ARG)?.let {
+            runBlocking {
+                movie = viewModel.getMovieByIdFromDb(it)
+            }
+        }
         setData()
+        Log.d("MOVIE", "${movie.watched}")
+        binding.watched.setOnCheckedChangeListener { _, isChecked ->
+            movie.watched = isChecked
+            Log.d("MOVIE", "${movie.movieId} ${movie.popularity} ${movie.watched}")
+            runBlocking {
+                viewModel.writeMovieToDb(movie)
+            }
+        }
     }
 
     // ля какава красота
     private fun setData() = with(binding) {
-        arguments?.getParcelable<Movie>(ARG)?.let { movie ->
-            movieTitle.text = movie.title
-            ratingValue.text = movie.voteAverage.toString()
-            //tagline.text = movie.tagline
-            releaseDate.text = movie.releaseDate
-            movieOverview.text = movie.overview
-            Picasso
-                .get()
-                .load(imageUrl + movie.posterPath)
-                .fit()
-                .centerCrop()
-                .into(poster)
-        }
+        movieTitle.text = movie.title
+        ratingValue.text = movie.voteAverage.toString()
+        releaseDate.text = movie.releaseDate
+        movieOverview.text = movie.overview
+        watched.isChecked = movie.watched
+        Picasso
+            .get()
+            .load(imageUrl + movie.posterPath)
+            .fit()
+            .centerCrop()
+            .into(poster)
     }
 }

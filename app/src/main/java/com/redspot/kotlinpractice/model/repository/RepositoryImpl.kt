@@ -1,48 +1,89 @@
 package com.redspot.kotlinpractice.model.repository
 
+import android.content.SharedPreferences
 import com.redspot.kotlinpractice.db.MovieDatabase
+import com.redspot.kotlinpractice.db.entity.Movie
 import com.redspot.kotlinpractice.model.entities.MoviesCategory
 import com.redspot.kotlinpractice.model.rest.CATEGORY_POPULAR
 import com.redspot.kotlinpractice.model.rest.CATEGORY_TOP_RATED
 import com.redspot.kotlinpractice.model.rest.CATEGORY_UPCOMING
 import com.redspot.kotlinpractice.model.rest.MovieCategoryRepo
 
-class RepositoryImpl(val database: MovieDatabase) : Repository {
+class RepositoryImpl(private val database: MovieDatabase) : Repository {
 
-    override fun getCategoriesFromServer() = mutableListOf<MoviesCategory>().apply {
-        add(getPopularCategory())
-        add(getTopRatedCategory())
-        add(getUpcomingCategory())
-    }.also { categories ->
-        insertCategoriesInDatabase(categories)
+    override fun getCategoriesFromServer(sharedPreferences: SharedPreferences) : List<MoviesCategory> {
+        mutableListOf<MoviesCategory>().apply {
+            add(getPopularCategory())
+            add(getTopRatedCategory())
+            add(getUpcomingCategory())
+        }.also { categories ->
+            insertCategoriesInDatabase(categories)
+        }
+        return getCategoriesFromLocalSource(sharedPreferences)
     }
 
-    override fun getCategoriesFromLocalSource() = mutableListOf<MoviesCategory>().apply {
-        add(
-            MoviesCategory(
-                "Popular",
-                database.movieCategoryDao().getMoviesFromCategoryByName("Popular")
+    override fun getCategoriesFromLocalSource(sharedPreferences: SharedPreferences) = mutableListOf<MoviesCategory>().apply {
+        if (sharedPreferences.getBoolean("show watched", false)) {
+            add(
+                MoviesCategory(
+                    "Popular",
+                    database.movieCategoryDao().getMoviesFromCategoryByName("Popular")
+                )
             )
-        )
-        add(
-            MoviesCategory(
-                "Top Rated",
-                database.movieCategoryDao().getMoviesFromCategoryByName("Top Rated")
+            add(
+                MoviesCategory(
+                    "Top Rated",
+                    database.movieCategoryDao()
+                        .getMoviesFromCategoryByNameSortByVoteAverage("Top Rated")
+                )
             )
-        )
-        add(
-            MoviesCategory(
-                "Upcoming",
-                database.movieCategoryDao().getMoviesFromCategoryByName("Upcoming")
+            add(
+                MoviesCategory(
+                    "Upcoming",
+                    database.movieCategoryDao().getMoviesFromCategoryByName("Upcoming")
+                )
             )
-        )
+        } else {
+            add(
+                MoviesCategory(
+                    "Popular",
+                    database.movieCategoryDao().getMoviesFromCategoryByNameNotWatched("Popular")
+                )
+            )
+            add(
+                MoviesCategory(
+                    "Top Rated",
+                    database.movieCategoryDao()
+                        .getMoviesFromCategoryByNameSortByVoteAverageNotWatched("Top Rated")
+                )
+            )
+            add(
+                MoviesCategory(
+                    "Upcoming",
+                    database.movieCategoryDao().getMoviesFromCategoryByNameNotWatched("Upcoming")
+                )
+            )
+        }
     }
+
+    override fun getMovieById(id: Long) = database.movieCategoryDao().getMovieById(id)
 
     override fun insertCategoriesInDatabase(categories: List<MoviesCategory>) {
         for (category in categories) {
+            for (apiMovie in category.movies) {
+                val dbMovie = database.movieCategoryDao().getMovieByIdNullable(apiMovie.movieId)
+                if (dbMovie != null) {
+                    apiMovie.watched = dbMovie.watched
+                    apiMovie.userVote = dbMovie.userVote
+                }
+            }
             database.movieCategoryDao()
                 .insertCategoryWithMovies(category.movies, category.categoryTitle)
         }
+    }
+
+    override fun insertMovieInDatabase(movie: Movie) {
+        database.movieCategoryDao().insertMovie(movie)
     }
 
     private fun getPopularCategory(): MoviesCategory {

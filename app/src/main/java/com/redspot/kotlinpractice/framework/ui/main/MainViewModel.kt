@@ -1,5 +1,6 @@
 package com.redspot.kotlinpractice.framework.ui.main
 
+import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.redspot.kotlinpractice.model.AppState
@@ -15,17 +16,17 @@ class MainViewModel(private val repository: Repository)
 
     fun getLiveData() = liveDataToObserve
 
-    fun getCategoriesFromServer() = getDataFromServer()
+    fun getCategoriesFromServer(sharedPreferences: SharedPreferences) = getDataFromServer(sharedPreferences)
 
-    fun getCategoriesFromLocalSource() = getDataFromLocalSource()
+    fun getCategoriesFromLocalSource(sharedPreferences: SharedPreferences) = getDataFromLocalSource(sharedPreferences)
 
-    private fun getDataFromServer() {
+    private fun getDataFromServer(sharedPreferences: SharedPreferences) {
         liveDataToObserve.value = AppState.Loading
         launch {
             delay(WAIT_TIME)
             liveDataToObserve.value = async(Dispatchers.IO) {
                 try {
-                    return@async AppState.Success(repository.getCategoriesFromServer())
+                    return@async AppState.Success(repository.getCategoriesFromServer(sharedPreferences))
                 } catch (error: Exception) {
                     error.message?.let {
                         return@async AppState.Failure(it)
@@ -35,13 +36,13 @@ class MainViewModel(private val repository: Repository)
         }
     }
 
-    private fun getDataFromLocalSource() {
+    private fun getDataFromLocalSource(sharedPreferences: SharedPreferences) {
         liveDataToObserve.value = AppState.Loading
         launch {
             delay(WAIT_TIME)
             liveDataToObserve.value = async(Dispatchers.IO) {
                 try {
-                    return@async AppState.Success(repository.getCategoriesFromLocalSource())
+                    return@async AppState.Success(repository.getCategoriesFromLocalSource(sharedPreferences))
                 } catch (error: Exception) {
                     error.message?.let {
                         return@async AppState.Failure(it)

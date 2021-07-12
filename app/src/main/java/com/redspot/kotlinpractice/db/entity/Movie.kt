@@ -15,10 +15,13 @@ data class Movie(
     val title: String,
     val adult: Boolean,
     val overview: String,
+    val popularity: Float,
     @SerializedName("vote_average")
     val voteAverage: Float,
     @SerializedName("release_date")
     val releaseDate: String,
     @SerializedName("poster_path")
-    val posterPath: String
+    val posterPath: String,
+    var userVote: Int = 0,
+    var watched: Boolean = false
 ) : Parcelable

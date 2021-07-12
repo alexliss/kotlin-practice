@@ -1,6 +1,7 @@
 package com.redspot.kotlinpractice.framework.ui.main
 
 import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.redspot.kotlinpractice.NetworkStatusBroadcastReceiver
@@ -29,6 +31,7 @@ class MainFragment : Fragment(), CategoryItemRecyclerAdapter.Interaction {
     private lateinit var binding: MainFragmentBinding
     private lateinit var mainCategoryRecycle: RecyclerView
     private lateinit var mainRecyclerAdapter: MainRecyclerAdapter
+    private lateinit var sharedPreferences: SharedPreferences
     private val viewModel: MainViewModel by viewModel()
     private var isLoaded = false
 
@@ -40,6 +43,7 @@ class MainFragment : Fragment(), CategoryItemRecyclerAdapter.Interaction {
 
     override fun onResume() {
         context?.registerReceiver(receiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         super.onResume()
     }
 
@@ -51,7 +55,7 @@ class MainFragment : Fragment(), CategoryItemRecyclerAdapter.Interaction {
     override fun onClickItem(movie: Movie) {
         activity?.supportFragmentManager?.apply {
             beginTransaction().apply {
-                add(R.id.container, DetailsFragment.newInstance(movie))
+                add(R.id.container, DetailsFragment.newInstance(movie.movieId))
                 addToBackStack("")
                 commitAllowingStateLoss()
             }
@@ -80,7 +84,7 @@ class MainFragment : Fragment(), CategoryItemRecyclerAdapter.Interaction {
         when (appState) {
             is AppState.Success -> {
                 mainLoading.hide()
-                setCategoryRecycler(appState.data as List<MoviesCategory>)
+                setCategoryRecycler(appState.data as MutableList<MoviesCategory>)
                 isLoaded = true;
             }
             is AppState.Loading -> {
@@ -88,7 +92,7 @@ class MainFragment : Fragment(), CategoryItemRecyclerAdapter.Interaction {
             }
             is AppState.Failure -> {
                 mainLoading.hide()
-                main.showSnackbar(appState.msg, "Reload", { viewModel.getCategoriesFromServer() })
+                main.showSnackbar(appState.msg, "Reload", { viewModel.getCategoriesFromServer(sharedPreferences) })
             }
         }
     }
@@ -103,11 +107,11 @@ class MainFragment : Fragment(), CategoryItemRecyclerAdapter.Interaction {
 
     private fun connectionManager(connectionStatus: Boolean) {
         when (connectionStatus) {
-            true -> if (!isLoaded) viewModel.getCategoriesFromServer()
+            true -> if (!isLoaded) viewModel.getCategoriesFromServer(sharedPreferences)
             false -> binding.main.showSnackbar(
                 "No connection. Get data from local DB?",
                 "OK",
-                { viewModel.getCategoriesFromLocalSource() })
+                { viewModel.getCategoriesFromLocalSource(sharedPreferences) })
         }
     }
 }
