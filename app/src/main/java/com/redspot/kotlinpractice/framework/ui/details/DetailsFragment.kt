@@ -64,6 +64,13 @@ class DetailsFragment : Fragment() {
         releaseDate.text = movie.releaseDate
         movieOverview.text = movie.overview
         watched.isChecked = movie.watched
+        userRatingBar.rating = movie.userVote.toFloat() / 2
+        userRatingBar.setOnRatingBarChangeListener { _, rating, _ ->
+            movie.userVote = (rating * 2).toInt()
+            runBlocking {
+                viewModel.writeMovieToDb(movie)
+            }
+        }
         Picasso
             .get()
             .load(imageUrl + movie.posterPath)
