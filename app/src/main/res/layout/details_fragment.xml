@@ -10,106 +10,138 @@
     android:focusable="true"
     tools:context=".framework.ui.details.DetailsFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/movieTitle"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="48dp"
-            android:text="@string/movie_title"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/movieOverview"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="48dp"
-            android:layout_marginBottom="32dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/movieTitle"
-            app:layout_constraintTop_toBottomOf="@+id/poster" />
+            <TextView
+                android:id="@+id/movieTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="48dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/movie_title"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/tagline"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="24dp"-->
-<!--            android:layout_marginEnd="16dp"-->
-<!--            android:textSize="16sp"-->
-<!--            android:textStyle="bold|italic"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/poster"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/movieTitle"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/rating" />-->
+            <TextView
+                android:id="@+id/movieOverview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="32dp"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/movieTitle"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/movieTitle"
+                app:layout_constraintTop_toBottomOf="@+id/userRatingBar" />
 
-        <TextView
-            android:id="@+id/rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/rating"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@+id/movieTitle"
-            app:layout_constraintTop_toBottomOf="@+id/releaseDate" />
+            <TextView
+                android:id="@+id/rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/montserrat"
+                android:text="@string/rating"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/movieTitle"
+                app:layout_constraintTop_toBottomOf="@+id/releaseDate" />
 
-        <TextView
-            android:id="@+id/ratingValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/rating"
-            app:layout_constraintTop_toTopOf="@+id/rating" />
+            <TextView
+                android:id="@+id/ratingValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:textSize="34sp"
+                app:layout_constraintStart_toStartOf="@+id/rating"
+                app:layout_constraintTop_toBottomOf="@+id/rating" />
 
-        <TextView
-            android:id="@+id/maxRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/max_rating"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/ratingValue"
-            app:layout_constraintTop_toTopOf="@+id/rating" />
+            <TextView
+                android:id="@+id/maxRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/max_rating"
+                android:textSize="34sp"
+                app:layout_constraintStart_toEndOf="@+id/ratingValue"
+                app:layout_constraintTop_toTopOf="@+id/ratingValue" />
 
-        <TextView
-            android:id="@+id/releaseDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textSize="12sp"
-            android:textStyle="italic"
-            app:layout_constraintStart_toStartOf="@+id/movieTitle"
-            app:layout_constraintTop_toBottomOf="@+id/movieTitle" />
+            <TextView
+                android:id="@+id/releaseDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                app:layout_constraintStart_toStartOf="@+id/movieTitle"
+                app:layout_constraintTop_toBottomOf="@+id/movieTitle" />
 
-        <ImageView
-            android:id="@+id/poster"
-            android:layout_width="135dp"
-            android:layout_height="214dp"
-            android:src="@drawable/the_room_poster"
-            app:layout_constraintEnd_toEndOf="@+id/movieOverview"
-            app:layout_constraintTop_toTopOf="@+id/movieTitle" />
+            <ImageView
+                android:id="@+id/poster"
+                android:layout_width="150dp"
+                android:layout_height="225dp"
+                app:layout_constraintEnd_toEndOf="@+id/movieTitle"
+                app:layout_constraintTop_toTopOf="@+id/releaseDate" />
 
-        <TextView
-            android:id="@+id/adult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/adult_mark"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/movieTitle"
-            app:layout_constraintStart_toEndOf="@+id/movieTitle"
-            app:layout_constraintTop_toTopOf="@+id/movieTitle" />
+            <TextView
+                android:id="@+id/adult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/adult_mark"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/movieTitle"
+                app:layout_constraintStart_toEndOf="@+id/movieTitle"
+                app:layout_constraintTop_toTopOf="@+id/movieTitle" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <RatingBar
+                android:id="@+id/userRatingBar"
+                style="@android:style/Widget.Material.Light.RatingBar.Indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:isIndicator="false"
+                android:numStars="5"
+                android:stepSize="0.5"
+                android:textAlignment="viewStart"
+                app:layout_constraintEnd_toEndOf="@+id/poster"
+                app:layout_constraintTop_toBottomOf="@+id/poster" />
+
+            <TextView
+                android:id="@+id/userRating"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat"
+                android:text="@string/your_rating"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/userRatingBar"
+                app:layout_constraintEnd_toStartOf="@+id/userRatingBar"
+                app:layout_constraintStart_toStartOf="@+id/movieTitle"
+                app:layout_constraintTop_toTopOf="@+id/userRatingBar" />
+
+            <CheckBox
+                android:id="@+id/watched"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/montserrat"
+                android:text="@string/watched"
+                app:layout_constraintStart_toStartOf="@+id/movieTitle"
+                app:layout_constraintTop_toBottomOf="@+id/maxRating" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

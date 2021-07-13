@@ -1,4 +1,4 @@
-package com.redspot.kotlinpractice.model.rest_entities
+package com.redspot.kotlinpractice.model.rest.rest_entities
 
 data class MovieDTO(
     val id: Int = 17473,
