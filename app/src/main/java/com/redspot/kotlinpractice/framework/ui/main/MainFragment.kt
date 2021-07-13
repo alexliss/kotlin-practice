@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
@@ -43,7 +44,7 @@ class MainFragment : Fragment(), CategoryItemRecyclerAdapter.Interaction {
 
     override fun onResume() {
         context?.registerReceiver(receiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
         super.onResume()
     }
 

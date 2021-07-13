@@ -43,4 +43,16 @@ class MainActivity : AppCompatActivity() {
                 .commitAllowingStateLoss()
         }
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+    override fun onBackPressed() {
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(false)
+        }
+        super.onBackPressed()
+    }
 }

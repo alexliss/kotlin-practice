@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.redspot.kotlinpractice.databinding.DetailsFragmentBinding
 import com.redspot.kotlinpractice.db.entity.Movie
@@ -40,6 +41,9 @@ class DetailsFragment : Fragment() {
 
     // основные дела
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        (activity as AppCompatActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+        }
         super.onViewCreated(view, savedInstanceState)
         arguments?.getLong(ARG)?.let {
             runBlocking {
