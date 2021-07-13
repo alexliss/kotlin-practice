@@ -7,7 +7,7 @@ import com.redspot.kotlinpractice.db.entity.MovieCategory
 
 @Dao
 interface MovieCategoryDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMovieCategory(entity: MovieCategory) : Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
